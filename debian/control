@@ -1,0 +1,14 @@
+Source: cronic
+Section: utils
+Priority: extra
+Maintainer: Denis Orlikhin <denis@ostrovok.ru>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.2
+Homepage: http://habilis.net/cronic/
+
+Package: cronic
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: cron jobs wrapper to send email only when error has occured
+ Cronic is a small shim shell script for wrapping cron jobs
+ so that cron only sends email when an error has occurred.

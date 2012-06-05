@@ -1,0 +1,34 @@
+http://habilis.net/cronic/
+
+Cronic is a small shim shell script for wrapping cron jobs so that cron only sends email when an error has occurred. Cronic defines an error as any non-trace error output or a non-zero result code. Cronic filters Bash execution traces (or anything matching PS4) from the error output, so jobs can be run with execution tracing to aid forensic debugging. Cronic has no options, it simply executes its arguments.
+
+0 1 * * * cronic backup
+With cronic, you can turn on Bash's strict error handling and debug options (exit on error, unset variable detection and execution tracing) to make sure problems are caught early. For example:
+
+#!/bin/bash
+
+set -o errexit -o nounset -o xtrace
+
+cp -rp data1 /backup
+cp -rp data2 /backup
+cp -rp data3 /backup
+When an error is detected, Cronic outputs a report listing the result code, error output, and combined trace and error output. The combined output can help put error messages in context. An example:
+
+From: user@example.net (Cron Daemon)
+To: user@example.net
+Subject: Cron <user@server> cronic backup
+
+Cronic detected failure or error output for the command:
+backup
+
+RESULT CODE: 1
+
+ERROR OUTPUT:
+cp: data2: Permission denied
+
+STANDARD OUTPUT:
+
+TRACE-ERROR OUTPUT:
++ cp -rp data1 /backup
++ cp -rp data2 /backup
+cp: data2: Permission denied
